@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -7,7 +8,8 @@ _ListenerInterface? _dialogs;
 Function? _callback;
 
 void _checkBuilderIsInMaterialApp() {
-  assert(_keyScaff.currentState != null, """Add asuka.builder in your MaterialApp;
+  assert(
+      _keyScaff.currentState != null, """Add asuka.builder in your MaterialApp;
 
        return MaterialApp(
          builder: asuka.builder,
@@ -16,7 +18,8 @@ void _checkBuilderIsInMaterialApp() {
 }
 
 void _checkAndInvokeCallback() {
-  assert(_callback != null, "Provide a callback function in the app main file for invoking it.");
+  assert(_callback != null,
+      "Provide a callback function in the app main file for invoking it.");
 
   _callback!();
 }
@@ -28,7 +31,8 @@ void _checkAndInvokeCallback() {
 /// Otherwise, the entry is inserted on top.
 ///
 /// It is an error to specify both `above` and `below`.
-void addOverlay(OverlayEntry entry, {OverlayEntry? below, OverlayEntry? above, bool callback = false}) {
+void addOverlay(OverlayEntry entry,
+    {OverlayEntry? below, OverlayEntry? above, bool callback = false}) {
   _checkBuilderIsInMaterialApp();
   if (callback) _checkAndInvokeCallback();
   if (_keyScaff.currentContext != null) {
@@ -44,10 +48,12 @@ void addOverlay(OverlayEntry entry, {OverlayEntry? below, OverlayEntry? above, b
 /// Otherwise, the entries are inserted on top.
 ///
 /// It is an error to specify both `above` and `below`.
-void ainsertAllOverlay(Iterable<OverlayEntry> entries, {OverlayEntry? below, OverlayEntry? above, bool callback = false}) {
+void ainsertAllOverlay(Iterable<OverlayEntry> entries,
+    {OverlayEntry? below, OverlayEntry? above, bool callback = false}) {
   _checkBuilderIsInMaterialApp();
   if (callback) _checkAndInvokeCallback();
-  Overlay.of(_keyScaff.currentContext!)!.insertAll(entries, below: below, above: above);
+  Overlay.of(_keyScaff.currentContext!)!
+      .insertAll(entries, below: below, above: above);
 }
 
 /// Shows a [SnackBar] at the bottom of the scaffold.
@@ -65,31 +71,41 @@ void ainsertAllOverlay(Iterable<OverlayEntry> entries, {OverlayEntry? below, Ove
 /// animation), use [removeCurrentSnackBar].
 ///
 /// See [Scaffold.of] for information about how to obtain the [ScaffoldState].
-material.ScaffoldFeatureController<material.SnackBar, material.SnackBarClosedReason> showSnackBar(material.SnackBar snackbar,
-    {bool callback = false}) {
+material.ScaffoldFeatureController<material.SnackBar,
+        material.SnackBarClosedReason>
+    showSnackBar(material.SnackBar snackbar, {bool callback = false}) {
   _checkBuilderIsInMaterialApp();
   if (callback) _checkAndInvokeCallback();
-  return ScaffoldMessenger.of(_keyScaff.currentState!.context).showSnackBar(snackbar);
+  return ScaffoldMessenger.of(_keyScaff.currentState!.context)
+      .showSnackBar(snackbar);
 }
 
 /// Removes the current [SnackBar] (if any) immediately.
 ///
 /// The removed snack bar does not run its normal exit animation. If there are
 /// any queued snack bars, they begin their entrance animation immediately.
-void removeCurrentSnackBar({material.SnackBarClosedReason reason = material.SnackBarClosedReason.remove, bool callback = false}) {
+void removeCurrentSnackBar(
+    {material.SnackBarClosedReason reason =
+        material.SnackBarClosedReason.remove,
+    bool callback = false}) {
   _checkBuilderIsInMaterialApp();
   if (callback) _checkAndInvokeCallback();
-  return ScaffoldMessenger.of(_keyScaff.currentState!.context).removeCurrentSnackBar(reason: reason);
+  return ScaffoldMessenger.of(_keyScaff.currentState!.context)
+      .removeCurrentSnackBar(reason: reason);
 }
 
 /// Removes the current [SnackBar] by running its normal exit animation.
 ///
 /// The closed completer is called after the animation is complete.
-void hideCurrentSnackBar({material.SnackBarClosedReason reason = material.SnackBarClosedReason.remove, bool callback = false}) {
+void hideCurrentSnackBar(
+    {material.SnackBarClosedReason reason =
+        material.SnackBarClosedReason.remove,
+    bool callback = false}) {
   _checkBuilderIsInMaterialApp();
   if (callback) _checkAndInvokeCallback();
   //return _keyScaff.currentState!.hideCurrentSnackBar(reason: reason);
-  return ScaffoldMessenger.of(_keyScaff.currentState!.context).hideCurrentSnackBar(reason: reason);
+  return ScaffoldMessenger.of(_keyScaff.currentState!.context)
+      .hideCurrentSnackBar(reason: reason);
 }
 
 /// Shows a material design bottom sheet in the nearest [Scaffold]. To show
@@ -118,8 +134,13 @@ void hideCurrentSnackBar({material.SnackBarClosedReason reason = material.SnackB
 /// to a menu or a dialog and prevents the user from interacting with the rest
 /// of the app. Modal bottom sheets can be created and displayed with the
 /// [showModalBottomSheet] function.
-material.PersistentBottomSheetController<T> showBottomSheet<T>(Widget Function(BuildContext) builder,
-    {Color? backgroundColor, double? elevation, ShapeBorder? shape, Clip? clipBehavior, bool callback = false}) {
+material.PersistentBottomSheetController<T> showBottomSheet<T>(
+    Widget Function(BuildContext) builder,
+    {Color? backgroundColor,
+    double? elevation,
+    ShapeBorder? shape,
+    Clip? clipBehavior,
+    bool callback = false}) {
   _checkBuilderIsInMaterialApp();
   if (callback) _checkAndInvokeCallback();
   return _keyScaff.currentState!.showBottomSheet(
@@ -282,6 +303,84 @@ Future<T?> showDialog<T>(
   );
 }
 
+/// Displays an iOS-style dialog above the current contents of the app, with
+/// iOS-style entrance and exit animations, modal barrier color, and modal
+/// barrier behavior (by default, the dialog is not dismissible with a tap on
+/// the barrier).
+///
+/// This function takes a `builder` which typically builds a [CupertinoAlertDialog]
+/// widget. Content below the dialog is dimmed with a [ModalBarrier]. The widget
+/// returned by the `builder` does not share a context with the location that
+/// `showCupertinoDialog` is originally called from. Use a [StatefulBuilder] or
+/// a custom [StatefulWidget] if the dialog needs to update dynamically.
+///
+/// The `context` argument is used to look up the [Navigator] for the dialog.
+/// It is only used when the method is called. Its corresponding widget can
+/// be safely removed from the tree before the dialog is closed.
+///
+/// The `useRootNavigator` argument is used to determine whether to push the
+/// dialog to the [Navigator] furthest from or nearest to the given `context`.
+/// By default, `useRootNavigator` is `true` and the dialog route created by
+/// this method is pushed to the root navigator.
+///
+/// {@macro flutter.widgets.RawDialogRoute}
+///
+/// If the application has multiple [Navigator] objects, it may be necessary to
+/// call `Navigator.of(context, rootNavigator: true).pop(result)` to close the
+/// dialog rather than just `Navigator.pop(context, result)`.
+///
+/// Returns a [Future] that resolves to the value (if any) that was passed to
+/// [Navigator.pop] when the dialog was closed.
+///
+/// ### State Restoration in Dialogs
+///
+/// Using this method will not enable state restoration for the dialog. In order
+/// to enable state restoration for a dialog, use [Navigator.restorablePush]
+/// or [Navigator.restorablePushNamed] with [CupertinoDialogRoute].
+///
+/// For more information about state restoration, see [RestorationManager].
+///
+/// {@tool sample}
+/// This sample demonstrates how to create a restorable Cupertino dialog. This is
+/// accomplished by enabling state restoration by specifying
+/// [CupertinoApp.restorationScopeId] and using [Navigator.restorablePush] to
+/// push [CupertinoDialogRoute] when the [CupertinoButton] is tapped.
+///
+/// {@macro flutter.widgets.RestorationManager}
+///
+/// ** See code in examples/api/lib/cupertino/route/show_cupertino_dialog.0.dart **
+/// {@end-tool}
+///
+/// See also:
+///
+///  * [CupertinoAlertDialog], an iOS-style alert dialog.
+///  * [showDialog], which displays a Material-style dialog.
+///  * [showGeneralDialog], which allows for customization of the dialog popup.
+///  * [DisplayFeatureSubScreen], which documents the specifics of how
+///    [DisplayFeature]s can split the screen into sub-screens.
+///  * <https://developer.apple.com/ios/human-interface-guidelines/views/alerts/>
+Future<T?> showCupertinoDialog<T>({
+  required WidgetBuilder builder,
+  String? barrierLabel,
+  bool useRootNavigator = true,
+  bool barrierDismissible = false,
+  RouteSettings? routeSettings,
+  Offset? anchorPoint,
+}) {
+  return Navigator.of(_keyScaff.currentState!.context,
+          rootNavigator: useRootNavigator)
+      .push<T>(CupertinoDialogRoute<T>(
+    builder: builder,
+    context: _keyScaff.currentState!.context,
+    barrierDismissible: barrierDismissible,
+    barrierLabel: barrierLabel,
+    barrierColor: CupertinoDynamicColor.resolve(
+        kCupertinoModalBarrierColor, _keyScaff.currentState!.context),
+    settings: routeSettings,
+    anchorPoint: anchorPoint,
+  ));
+}
+
 /// init Asuka: Add in your MaterialApp
 /// return MaterialApp(
 ///         builder: asuka.builder,
@@ -297,8 +396,9 @@ Widget builder(BuildContext context, Widget? child) {
   );
 }
 
-material.HeroController get asukaHeroController =>
-    HeroController(createRectTween: (begin, end) => MaterialRectCenterArcTween(begin: begin, end: end));
+material.HeroController get asukaHeroController => HeroController(
+    createRectTween: (begin, end) =>
+        MaterialRectCenterArcTween(begin: begin, end: end));
 
 class _BuildPage extends StatefulWidget {
   final Widget? child;
