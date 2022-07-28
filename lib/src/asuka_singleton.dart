@@ -381,6 +381,10 @@ Future<T?> showCupertinoDialog<T>({
   ));
 }
 
+void pop<T extends Object?>([T? result]) {
+  Navigator.of(_keyScaff.currentState!.context).pop(result);
+}
+
 /// init Asuka: Add in your MaterialApp
 /// return MaterialApp(
 ///         builder: asuka.builder,
